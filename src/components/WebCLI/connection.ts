@@ -1,8 +1,10 @@
+import { Label } from "./WebCLI";
 type Options = {
   address: string;
   messageCallback: (message: string) => void;
   onclose: () => void;
   onopen: () => void;
+  onerror: (error: string | Event) => void;
 };
 
 class Connection {
@@ -12,6 +14,7 @@ class Connection {
   _messageCallback: (message: string) => void;
   _wsOnOpen: () => void;
   _wsOnClose: () => void;
+  _wsOnError: (error: Event | string) => void;
   _ws: WebSocket | null = null;
 
   constructor(options: Options) {
@@ -19,14 +22,15 @@ class Connection {
     this.address = options.address;
     this._wsOnOpen = options.onopen;
     this._wsOnClose = options.onclose;
+    this._wsOnError = options.onerror;
   }
 
   connect() {
-    const ws = new WebSocket(this.address);
-    ws.onopen = this._wsOnOpen;
-    ws.onclose = this._wsOnClose;
-    ws.onmessage = this._handleMessage.bind(this);
-    this._ws = ws;
+    this._ws = new WebSocket(this.address);
+    this._ws.onopen = this._wsOnOpen;
+    this._ws.onclose = this._wsOnClose;
+    this._ws.onmessage = this._handleMessage.bind(this);
+    this._ws.onerror = this._wsOnError;
     return this;
   }
 
@@ -35,34 +39,63 @@ class Connection {
   }
 
   disconnect() {
+    console.log("disconnect");
     this._ws?.close();
     if (this._timeout) {
       clearTimeout(this._timeout);
     }
   }
 
-  _handleMessage(e: MessageEvent) {
+  _handleMessage(messageEvent: MessageEvent) {
     try {
-      const data = JSON.parse(e.data);
-      if (data["redirect-to"]) {
-        // This is a JAAS controller and we need to instead
-        // connect to the sub controller.
-        this._ws?.close();
-        this.address = data["redirect-to"];
-        this.connect();
+      let data: unknown;
+      try {
+        data = JSON.parse(messageEvent.data);
+      } catch (e) {
+        // TODO: write correct message:
+        throw new Error("Incorrect data");
       }
-
-      if (data.done) {
+      if (!data || typeof data !== "object") {
+        // TODO: write correct message:
+        throw new Error("Incorrect data");
+      }
+      if (
+        "redirect-to" in data &&
+        data["redirect-to"] &&
+        typeof data["redirect-to"] === "string"
+      ) {
+        try {
+          // This is a JAAS controller and we need to instead
+          // connect to the sub controller.
+          this._ws?.close();
+          this.address = data["redirect-to"];
+          this.connect();
+        } catch (e) {
+          // TODO: write correct message:
+          throw new Error(Label.CONNECTION_ERROR);
+        }
+      }
+      if ("done" in data && data.done) {
         // This is the last message.
         return;
       }
-      if (!data.output) {
+      if (!("output" in data) || !data.output) {
         // This is the first message, an empty object and a newline.
         return;
       }
-      this._pushToMessageBuffer(`\n${data?.output[0]}`);
-    } catch (e) {
-      console.log(e);
+      if (!Array.isArray(data.output)) {
+        // TODO: write correct message:
+        throw new Error("Incorrect data");
+      }
+      this._pushToMessageBuffer(`\n${data.output[0]}`);
+    } catch (error) {
+      this._wsOnError(
+        error instanceof Error
+          ? error.message
+          : typeof error === "string"
+            ? error
+            : "unknown error",
+      );
       // XXX handle the invalid data response
     }
   }

@@ -119,6 +119,13 @@ const WebCLI = ({
   }, [controllerWSHost, modelUUID, protocol]);
 
   useEffect(() => {
+    return () => {
+      // TODO close old websocket before creating a new one.
+      connection?.disconnect();
+    };
+  }, [connection]);
+
+  useEffect(() => {
     if (!wsAddress) {
       setInlineError(InlineErrors.CONNECTION, Label.CONNECTION_ERROR);
       return;
@@ -130,7 +137,15 @@ const WebCLI = ({
         // Unused handler.
       },
       onclose: () => {
-        // Unused handler.
+        console.log("websocket closed");
+        setInlineError(
+          InlineErrors.CONNECTION,
+          "connection closed [reconnect]",
+        );
+      },
+      onerror: (error) => {
+        console.log("ws error", error);
+        setInlineError(InlineErrors.CONNECTION);
       },
       messageCallback: (message: string) => {
         wsMessageStore.current = wsMessageStore.current + message;
@@ -138,9 +153,6 @@ const WebCLI = ({
       },
     }).connect();
     setConnection(conn);
-    return () => {
-      conn.disconnect();
-    };
   }, [setInlineError, wsAddress]);
 
   const handleCommandSubmit = (e: FormEvent<HTMLFormElement>) => {
