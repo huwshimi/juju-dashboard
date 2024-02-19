@@ -35,10 +35,16 @@ class Connection {
     ws.onmessage = this.#handleMessage.bind(this);
     ws.onerror = this.#wsOnError;
     this.#ws = ws;
+    // setTimeout(() => {
+    //   this.disconnect();
+    // }, 5000);
     return this;
   }
 
   send(message: string) {
+    if (!this.isActive()) {
+      throw new Error("not connected");
+    }
     this.#ws?.send(message);
   }
 
@@ -49,8 +55,15 @@ class Connection {
     }
   }
 
-  isOpen() {
-    return this.#ws?.readyState === WebSocket.OPEN;
+  get websocket() {
+    return this.#ws;
+  }
+
+  isActive() {
+    return (
+      this.#ws?.readyState === WebSocket.CONNECTING ||
+      this.#ws?.readyState === WebSocket.OPEN
+    );
   }
 
   #handleMessage(messageEvent: MessageEvent) {

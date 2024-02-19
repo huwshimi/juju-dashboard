@@ -48,10 +48,7 @@ const WebCLI = ({
   modelUUID,
   protocol = "wss",
 }: Props) => {
-  const [connection, setConnection] = useState<Connection | null>(null);
-  const [pendingConnections, setPendingConnections] = useState<Connection[]>(
-    [],
-  );
+  const connection = useRef<Connection | null>(null);
   const [shouldShowHelp, setShouldShowHelp] = useState(false);
   const [historyPosition, setHistoryPosition] = useState(0);
   const [inlineErrors, setInlineError, hasInlineError] = useInlineErrors();
@@ -130,6 +127,11 @@ const WebCLI = ({
     const conn = new Connection({
       address: wsAddress,
       onopen: () => {
+        console.log("onopen");
+        if (conn.websocket !== connection.current?.websocket) {
+          console.log("old websocket disconnect");
+          conn.disconnect();
+        }
         // Unused handler.
       },
       onclose: () => {
@@ -146,27 +148,19 @@ const WebCLI = ({
         setOutput(wsMessageStore.current);
       },
     }).connect();
-    setConnection((prevConnection) => {
-      if (!prevConnection || prevConnection.isOpen()) {
-        prevConnection?.disconnect();
-      } else {
-        setPendingConnections((prevPendingConnections) => [
-          ...prevPendingConnections,
-          prevConnection,
-        ]);
-      }
-      return conn;
-    });
+
+    connection.current = conn;
   }, [setInlineError, wsAddress]);
 
-  useEffect(() => {
-    return () => {
-      pendingConnections.forEach((connection) => {
-        connection?.disconnect();
-      });
-      connection?.disconnect();
-    };
-  }, [connection, pendingConnections]);
+  useEffect(
+    () => () => {
+      if (connection.current?.isActive()) {
+        // console.log("close ws");
+        // connection.current?.disconnect();
+      }
+    },
+    [],
+  );
 
   const handleCommandSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -184,8 +178,8 @@ const WebCLI = ({
       // A user name and password were not provided so try and get a macaroon.
       // The macaroon should be already stored as we've already connected to
       // the model for the model status.
-      const origin = connection?.getAddress()
-        ? new URL(connection?.getAddress())?.origin
+      const origin = connection.current?.getAddress()
+        ? new URL(connection.current?.getAddress())?.origin
         : null;
       const macaroons = origin ? bakery.storage.get(origin) : null;
       if (macaroons) {
@@ -217,12 +211,19 @@ const WebCLI = ({
       setHistoryPosition(0);
     }
 
-    connection?.send(
-      JSON.stringify({
-        ...authentication,
-        commands: [command],
-      }),
-    );
+    try {
+      connection.current?.send(
+        JSON.stringify({
+          ...authentication,
+          commands: [command],
+        }),
+      );
+    } catch (error) {
+      setInlineError(
+        InlineErrors.CONNECTION,
+        error instanceof Error ? error.message : "Unknown error.",
+      );
+    }
     sendAnalytics({
       category: "User",
       action: "WebCLI command sent",
