@@ -124,50 +124,35 @@ const WebCLI = ({
       return;
     }
     setInlineError(InlineErrors.CONNECTION, null);
+    if (connection.current?.isActive()) {
+      return;
+    }
     const conn = new Connection({
       address: wsAddress,
-      onopen: () => {
-        // Close this websocket connection if it was in CONNECTING state
-        // while a new websocket connection was established.
-        if (conn.websocket !== connection.current?.websocket) {
-          conn.disconnect();
-        }
-      },
+      onopen: () => {},
       onclose: () => {
         // Unused handler.
       },
       onerror: (error) => {
-        setInlineError(
-          InlineErrors.CONNECTION,
-          typeof error === "string" ? error : "Unknown error.",
-        );
+        // Only display errors if they're related to the current websocket connection.
+        if (conn.websocket === connection.current?.websocket) {
+          setInlineError(
+            InlineErrors.CONNECTION,
+            typeof error === "string" ? error : "Unknown error.",
+          );
+        }
       },
       messageCallback: (message: string) => {
         wsMessageStore.current = wsMessageStore.current + message;
         setOutput(wsMessageStore.current);
       },
     }).connect();
-    if (connection.current?.isOpen()) {
-      connection.current?.disconnect();
-    }
     connection.current = conn;
   }, [setInlineError, wsAddress]);
 
   useEffect(
     () => () => {
-      // Cleanup gets triggered twice in development environment due to
-      // React's StrictMode. As it gets triggered in rapid successions, it
-      // closes the previous WebSocket connection while it is in CONNECTING
-      // state. This triggers an error in the closed WebSocket connection, which
-      // subsequently displays an error message in the WebCLI. To fix this
-      // issue, in development environment we only close the WebSocket
-      // connection if it is in OPEN state. In production environment, as the
-      // cleanup runs only once, we just close the last connection, even if it
-      // is in OPEN state.
-      if (
-        process.env.NODE_ENV !== "development" ||
-        connection.current?.isOpen()
-      ) {
+      if (connection.current?.isActive()) {
         connection.current?.disconnect();
       }
     },

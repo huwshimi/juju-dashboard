@@ -62,6 +62,10 @@ class Connection {
     return this.#ws?.readyState === WebSocket.OPEN;
   }
 
+  isActive() {
+    return this.isOpen() || this.#ws?.readyState === WebSocket.CONNECTING;
+  }
+
   #handleMessage(messageEvent: MessageEvent) {
     try {
       let data: unknown;
