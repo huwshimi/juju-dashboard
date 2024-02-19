@@ -124,6 +124,7 @@ const WebCLI = ({
       return;
     }
     setInlineError(InlineErrors.CONNECTION, null);
+    // If we have an active WebSocket connection then don't create a new one.
     if (connection.current?.isActive()) {
       return;
     }
