@@ -32,6 +32,7 @@ import urls from "urls";
 import { breakLines } from "utils";
 
 import ControllersOverview from "./ControllerOverview/ControllerOverview";
+import { controllerInfoFactory } from "../../testing/factories/juju/juju";
 import "./_controllers.scss";
 
 export enum Label {
@@ -55,21 +56,52 @@ function Details() {
   const loginErrors = useAppSelector(getLoginErrors);
   const visitURLs = useAppSelector(getVisitURLs);
 
-  const controllerMap: Record<string, AnnotatedController> = {};
+  const controllerMap: Record<string, AnnotatedController> = {
+    "1": {
+      ...controllerInfoFactory.build({
+        name: "JAAS",
+      }),
+      models: 2,
+      machines: 5,
+      applications: 21,
+      units: 85,
+      wsControllerURL: "1",
+    },
+    "2": {
+      ...controllerInfoFactory.build({
+        name: "HA",
+      }),
+      models: 3,
+      machines: 6,
+      applications: 17,
+      units: 32,
+      wsControllerURL: "2",
+    },
+    "3": {
+      ...controllerInfoFactory.build({
+        name: "auth-provider",
+      }),
+      models: 1,
+      machines: 4,
+      applications: 4,
+      units: 8,
+      wsControllerURL: "3",
+    },
+  };
   if (controllerData) {
-    Object.entries(controllerData).forEach(([wsControllerURL, controllers]) => {
-      controllers.forEach((controller) => {
-        const id = "uuid" in controller ? controller.uuid : wsControllerURL;
-        controllerMap[id] = {
-          ...controller,
-          models: 0,
-          machines: 0,
-          applications: 0,
-          units: 0,
-          wsControllerURL,
-        };
-      });
-    });
+    // Object.entries(controllerData).forEach(([wsControllerURL, controllers]) => {
+    //   controllers.forEach((controller) => {
+    //     const id = "uuid" in controller ? controller.uuid : wsControllerURL;
+    //     controllerMap[id] = {
+    //       ...controller,
+    //       models: 0,
+    //       machines: 0,
+    //       applications: 0,
+    //       units: 0,
+    //       wsControllerURL,
+    //     };
+    //   });
+    // });
     if (modelData) {
       for (const modelUUID in modelData) {
         const model = modelData[modelUUID];
