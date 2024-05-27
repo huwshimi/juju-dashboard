@@ -1,7 +1,7 @@
 import { Spinner } from "@canonical/react-components";
 import { unwrapResult } from "@reduxjs/toolkit";
 import type { FormEvent, PropsWithChildren } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import reactHotToast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
@@ -17,7 +17,6 @@ import {
   getLoginError,
   getVisitURLs,
   getWSControllerURL,
-  isLoggedIn,
   getIsJuju,
 } from "store/general/selectors";
 import type { RootState } from "store/store";
@@ -43,19 +42,22 @@ export default function LogIn({ children }: PropsWithChildren) {
   const config = useSelector(getConfig);
   const isJuju = useSelector(getIsJuju);
   const wsControllerURL = useAppSelector(getWSControllerURL);
-  const userIsLoggedIn = useAppSelector((state) =>
-    isLoggedIn(state, wsControllerURL),
-  );
   const loginError = useAppSelector((state) =>
     getLoginError(state, wsControllerURL),
   );
   const visitURLs = useAppSelector(getVisitURLs);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // This login component wraps all other views, so this useEffect will run each
   // time we get an authentication request.
   useEffect(() => {
     void (async () => {
-      console.log(await fetch("/auth/whoami"));
+      const authenticated = await fetch("/auth/whoami");
+      if (authenticated.ok) {
+        setIsLoggedIn(true);
+      } else {
+        window.location.assign("/auth/login");
+      }
     })();
     visitURLs?.forEach((visitURL) => {
       if (!viewedAuthRequests.current.includes(visitURL)) {
@@ -89,13 +91,13 @@ export default function LogIn({ children }: PropsWithChildren) {
 
   return (
     <>
-      {!userIsLoggedIn && (
+      {!isLoggedIn && (
         <div className="login">
-          <FadeUpIn isActive={!userIsLoggedIn}>
+          <FadeUpIn isActive={!isLoggedIn}>
             <div className="login__inner p-card--highlighted">
               <Logo className="login__logo" dark isJuju={isJuju} />
               {config?.identityProviderAvailable ? (
-                <IdentityProviderForm userIsLoggedIn={userIsLoggedIn} />
+                <IdentityProviderForm userIsLoggedIn={isLoggedIn} />
               ) : (
                 <UserPassForm />
               )}

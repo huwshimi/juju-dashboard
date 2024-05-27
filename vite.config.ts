@@ -35,18 +35,20 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "0.0.0.0",
       port: Number(env.PORT),
+      // On parent machine:
+      //   ssh -L :8082:192.168.64.56:8082 -L :17070:192.168.64.56:17070  -L :443:192.168.64.56:443 -L :8036:192.168.64.56:8036 ubuntu@192.168.64.56
       proxy: {
         ["/auth"]: {
-          hostRewrite: true,
-          protocolRewrite: true,
+          //   hostRewrite: "jimm.localhost:17070",
+          //   protocolRewrite: true,
           changeOrigin: true,
           autoRewrite: true,
           secure: false,
-          cookieDomainRewrite: {
-            "jimm.localhost": "dev.local:8036",
-            "*": "dev.local:8036",
-          },
-          target: "http://jimm.localhost/",
+          //   cookieDomainRewrite: {
+          //     //   "jimm.localhost:17070": "dev.local:8036",
+          //     "*": "dev.local:8036",
+          //   },
+          target: "http://jimm.localhost:17070/",
         },
       },
     },
