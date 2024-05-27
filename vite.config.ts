@@ -35,6 +35,20 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "0.0.0.0",
       port: Number(env.PORT),
+      proxy: {
+        ["/auth"]: {
+          hostRewrite: true,
+          protocolRewrite: true,
+          changeOrigin: true,
+          autoRewrite: true,
+          secure: false,
+          cookieDomainRewrite: {
+            "jimm.localhost": "dev.local:8036",
+            "*": "dev.local:8036",
+          },
+          target: "http://jimm.localhost/",
+        },
+      },
     },
     test: {
       coverage: {

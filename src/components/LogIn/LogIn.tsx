@@ -54,6 +54,9 @@ export default function LogIn({ children }: PropsWithChildren) {
   // This login component wraps all other views, so this useEffect will run each
   // time we get an authentication request.
   useEffect(() => {
+    void (async () => {
+      console.log(await fetch("/auth/whoami"));
+    })();
     visitURLs?.forEach((visitURL) => {
       if (!viewedAuthRequests.current.includes(visitURL)) {
         reactHotToast.custom((t) => (
