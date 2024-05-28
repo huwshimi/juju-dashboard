@@ -73,6 +73,7 @@ const UserMenu = () => {
                 onClick: () => {
                   dispatch(appThunks.logOut())
                     .then(unwrapResult)
+                    .then(() => fetch("/auth/logout"))
                     .catch((error) => {
                       reactHotToast.custom((t) => (
                         <ToastCard toastInstance={t} type="negative">
