@@ -63,7 +63,7 @@ class JIMMV3 {
   constructor(transport: Transport, info: ConnectionInfo) {
     this._transport = transport;
     this._info = info;
-    this.version = 3;
+    this.version = 4;
 
     // Automatically bind all methods to instances.
     autoBind(this);
@@ -74,7 +74,7 @@ class JIMMV3 {
       const req = {
         type: "JIMM",
         request: "DisableControllerUUIDMasking",
-        version: 3,
+        version: 4,
         params: {},
       };
       this._transport.write(req, resolve, reject);
@@ -86,7 +86,7 @@ class JIMMV3 {
       const req = {
         type: "JIMM",
         request: "FindAuditEvents",
-        version: 3,
+        version: 4,
         params: params,
       };
       this._transport.write(req, resolve, reject);
@@ -98,7 +98,7 @@ class JIMMV3 {
       const req = {
         type: "JIMM",
         request: "ListControllers",
-        version: 3,
+        version: 4,
         params: {},
       };
       this._transport.write(req, resolve, reject);
@@ -107,5 +107,5 @@ class JIMMV3 {
 }
 
 JIMMV3.NAME = "JIMM";
-JIMMV3.VERSION = 3;
+JIMMV3.VERSION = 4;
 export default JIMMV3;
