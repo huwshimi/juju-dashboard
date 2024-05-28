@@ -38,6 +38,7 @@ export enum Label {
 }
 
 export default function LogIn({ children }: PropsWithChildren) {
+  const dispatch = useAppDispatch();
   const viewedAuthRequests = useRef<string[]>([]);
   const config = useSelector(getConfig);
   const isJuju = useSelector(getIsJuju);
@@ -54,6 +55,9 @@ export default function LogIn({ children }: PropsWithChildren) {
     void (async () => {
       const authenticated = await fetch("/auth/whoami");
       if (authenticated.ok) {
+        dispatch(appThunks.connectAndStartPolling())
+          .then(unwrapResult)
+          .catch((error) => console.error(Label.POLLING_ERROR, error));
         setIsLoggedIn(true);
       } else {
         window.location.assign("/auth/login");
@@ -87,7 +91,7 @@ export default function LogIn({ children }: PropsWithChildren) {
         viewedAuthRequests.current = [...viewedAuthRequests.current, visitURL];
       }
     });
-  }, [visitURLs]);
+  }, [dispatch, visitURLs]);
 
   return (
     <>
