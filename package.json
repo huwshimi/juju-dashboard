@@ -145,6 +145,13 @@
   },
   "packageManager": "yarn@4.6.0",
   "resolutions": {
-    "anchorme": "^3.0.8"
+    "anchorme": "^3.0.8",
+    "csstype": "^3.1.3",
+    "@canonical/rebac-admin": "portal:/home/ubuntu/code/rebac-admin",
+    "react": "portal:/home/ubuntu/code/rebac-admin/node_modules/react",
+    "react-dom": "portal:/home/ubuntu/code/rebac-admin/node_modules/react-dom",
+    "react-router": "portal:/home/ubuntu/code/rebac-admin/node_modules/react-router",
+    "@types/react": "portal:/home/ubuntu/code/rebac-admin/node_modules/@types/react",
+    "@types/react-dom": "portal:/home/ubuntu/code/rebac-admin/node_modules/@types/react-dom"
   }
 }
