@@ -177,17 +177,6 @@ export const modelPollerMiddleware: Middleware<
               identity,
               JIMMRelation.ADMINISTRATOR,
             );
-            const relation = "administrator";
-            const target = "model-4288a56d-b7e2-4486-8afc-cccf64ee79ca";
-            console.log("identity", identity);
-            console.log("relation", relation);
-            console.log("target", target);
-            const response = await conn.facades.jimM?.checkRelation({
-              object: identity,
-              relation,
-              target_object: target,
-            });
-            console.log("response", response);
           } catch (error) {
             console.error(error);
           }
