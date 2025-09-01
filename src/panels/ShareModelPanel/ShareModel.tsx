@@ -1,4 +1,4 @@
-import type { ErrorResults } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
+import type { ErrorResults } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
 import { Button, Icon, Input, RadioInput } from "@canonical/react-components";
 import cloneDeep from "clone-deep";
 import { useFormik } from "formik";

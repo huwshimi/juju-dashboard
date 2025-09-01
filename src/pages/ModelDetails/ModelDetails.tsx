@@ -1,4 +1,4 @@
-import type { AllWatcherId } from "@canonical/jujulib/dist/api/facades/client/ClientV6";
+import type { AllWatcherId } from "@canonical/jujulib/dist/api/facades/client/ClientV8";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes, useParams } from "react-router";
@@ -62,7 +62,8 @@ export default function ModelDetails() {
       }
     }
     if (modelUUID) {
-      void loadFullData();
+      // TODO
+      // void loadFullData();
     }
     return () => {
       if (watcherHandle && pingerIntervalId && conn) {

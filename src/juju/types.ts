@@ -1,16 +1,15 @@
 import type { Connection } from "@canonical/jujulib";
 import type ActionV7 from "@canonical/jujulib/dist/api/facades/action/ActionV7";
-import type AllWatcherV3 from "@canonical/jujulib/dist/api/facades/all-watcher/AllWatcherV3";
 import type { AnnotationsGetResult } from "@canonical/jujulib/dist/api/facades/annotations/AnnotationsV2";
 import type AnnotationsV2 from "@canonical/jujulib/dist/api/facades/annotations/AnnotationsV2";
-import type ApplicationV18 from "@canonical/jujulib/dist/api/facades/application/ApplicationV18";
-import type CharmsV6 from "@canonical/jujulib/dist/api/facades/charms/CharmsV6";
-import type { FullStatus } from "@canonical/jujulib/dist/api/facades/client/ClientV6";
-import type ClientV6 from "@canonical/jujulib/dist/api/facades/client/ClientV6";
+import type ApplicationV20 from "@canonical/jujulib/dist/api/facades/application/ApplicationV20";
+import type CharmsV7 from "@canonical/jujulib/dist/api/facades/charms/CharmsV7";
+import type { FullStatus } from "@canonical/jujulib/dist/api/facades/client/ClientV8";
+import type ClientV8 from "@canonical/jujulib/dist/api/facades/client/ClientV8";
 import type CloudV7 from "@canonical/jujulib/dist/api/facades/cloud/CloudV7";
 import type ControllerV9 from "@canonical/jujulib/dist/api/facades/controller/ControllerV9";
-import type ModelManagerV9 from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
-import type { ModelSLAInfo } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
+import type ModelManagerV11 from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
+import type { ModelSLAInfo } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
 import type PingerV1 from "@canonical/jujulib/dist/api/facades/pinger/PingerV1";
 import type SecretsV2 from "@canonical/jujulib/dist/api/facades/secrets/SecretsV2";
 
@@ -360,14 +359,13 @@ export type FullStatusWithAnnotations = FullStatus & {
 
 export type Facades = {
   action?: ActionV7;
-  allWatcher?: AllWatcherV3;
   annotations?: AnnotationsV2;
-  application?: ApplicationV18;
-  charms?: CharmsV6;
-  client?: ClientV6;
+  application?: ApplicationV20;
+  charms?: CharmsV7;
+  client?: ClientV8;
   cloud?: CloudV7;
   controller?: ControllerV9;
-  modelManager?: ModelManagerV9;
+  modelManager?: ModelManagerV11;
   pinger?: PingerV1;
   secrets?: SecretsV2;
   jimM?: InstanceType<typeof JIMMV4>;

@@ -1,4 +1,4 @@
-import type { ModelInfoResults } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
+import type { ModelInfoResults } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import cloneDeep from "clone-deep";
 

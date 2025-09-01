@@ -1,5 +1,5 @@
-import type { Charm } from "@canonical/jujulib/dist/api/facades/charms/CharmsV6";
-import type { ModelInfo } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
+import type { Charm } from "@canonical/jujulib/dist/api/facades/charms/CharmsV7";
+import type { ModelInfo } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
 import type {
   ListSecretResult,
   SecretValueResult,

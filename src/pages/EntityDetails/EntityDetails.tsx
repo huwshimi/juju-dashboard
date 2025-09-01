@@ -14,6 +14,7 @@ import type { BaseLayoutContext } from "layout/BaseLayout";
 import MainContent from "layout/MainContent";
 import { StatusView } from "layout/Status";
 import {
+  getModelDataByUUID,
   getModelInfo,
   getModelListLoaded,
   getModelUUIDFromList,
@@ -46,7 +47,10 @@ const EntityDetails = ({ modelWatcherError }: Props) => {
   const modelUUID = useAppSelector((state) =>
     getModelUUIDFromList(state, modelName, userName),
   );
-  const modelInfo = useAppSelector((state) => getModelInfo(state, modelUUID));
+  // TODO
+  const modelInfo = useAppSelector((state) =>
+    getModelDataByUUID(state, modelUUID),
+  )?.info;
   const { isNestedEntityPage } = useEntityDetailsParams();
   // Pass the base context to the children of the outlet in this component:
   const context = useOutletContext<BaseLayoutContext>();

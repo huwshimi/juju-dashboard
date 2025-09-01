@@ -2,7 +2,7 @@ import type {
   ApplicationStatus,
   MachineStatus,
   UnitStatus,
-} from "@canonical/jujulib/dist/api/facades/client/ClientV6";
+} from "@canonical/jujulib/dist/api/facades/client/ClientV8";
 import { createSelector } from "@reduxjs/toolkit";
 import cloneDeep from "clone-deep";
 import fastDeepEqual from "fast-deep-equal/es6";
@@ -340,7 +340,9 @@ export const getModelByUUID = createSelector(
 
 export const getModelDataByUUID = createSelector(
   [getModelData, (_, modelUUID?: string | null) => modelUUID],
-  (modelData, modelUUID) => (modelUUID ? modelData[modelUUID] : null),
+  (modelData, modelUUID) => {
+    return modelUUID ? modelData[modelUUID] : null;
+  },
 );
 
 /**
@@ -513,7 +515,7 @@ export const getModelWatcherDataByUUID = createSelector(
 );
 
 export const getModelInfo = createSelector(
-  getModelWatcherDataByUUID,
+  getModelDataByUUID,
   (modelWatcherData): WatcherModelInfo | null => {
     if (modelWatcherData) {
       return modelWatcherData.model;
@@ -547,7 +549,7 @@ export const getModelUUIDFromList = createSelector(
 );
 
 export const getModelAnnotations = createSelector(
-  getModelWatcherDataByUUID,
+  getModelDataByUUID,
   (modelWatcherData): AnnotationData | null => {
     if (modelWatcherData) {
       return modelWatcherData.annotations;
@@ -557,7 +559,7 @@ export const getModelAnnotations = createSelector(
 );
 
 export const getModelApplications = createSelector(
-  getModelWatcherDataByUUID,
+  getModelDataByUUID,
   (modelWatcherData): ApplicationData | null => {
     if (modelWatcherData) {
       return modelWatcherData.applications;
@@ -567,7 +569,7 @@ export const getModelApplications = createSelector(
 );
 
 export const getModelUnits = createSelector(
-  getModelWatcherDataByUUID,
+  getModelDataByUUID,
   (modelWatcherData): UnitData | null => {
     if (modelWatcherData) {
       return modelWatcherData.units;
@@ -577,7 +579,7 @@ export const getModelUnits = createSelector(
 );
 
 export const getModelRelations = createSelector(
-  getModelWatcherDataByUUID,
+  getModelDataByUUID,
   (modelWatcherData): RelationData | null => {
     if (modelWatcherData) {
       return modelWatcherData.relations;
@@ -587,7 +589,7 @@ export const getModelRelations = createSelector(
 );
 
 export const getModelMachines = createSelector(
-  getModelWatcherDataByUUID,
+  getModelDataByUUID,
   (modelWatcherData): MachineData | null => {
     if (modelWatcherData) {
       return modelWatcherData.machines;
@@ -693,7 +695,8 @@ export const getFilteredModelData = createSelector(
           ? extractCredentialName(data.info?.["cloud-credential-tag"])
           : null;
       const region = "model" in data ? data.model.region : null;
-      const owner = data.info ? extractOwnerName(data.info["owner-tag"]) : null;
+      // TODO
+      const owner = null;
       // Combine all of the above to create string for fuzzy custom search
       const combinedModelAttributes = [
         modelName,
@@ -764,7 +767,8 @@ export const getModelUUID = createSelector(
         const model = modelData[uuid].info;
         if (model && model.name === modelName) {
           if (owner) {
-            if (model["owner-tag"] === `user-${owner}`) {
+            // TODO
+            if (model.qualifier === owner) {
               // If this is a shared model then we'll also have an owner name
               return uuid;
             }
@@ -844,7 +848,8 @@ export const getGroupedByOwnerAndFilteredModelData = createSelector(
     for (const modelUUID in modelData) {
       const model = modelData[modelUUID];
       if (model.info) {
-        const owner = extractOwnerName(model.info["owner-tag"]);
+        // TODO
+        const owner = extractOwnerName(model.info.qualifier);
         if (!grouped[owner]) {
           grouped[owner] = [];
         }

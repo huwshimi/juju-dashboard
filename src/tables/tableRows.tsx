@@ -1,8 +1,8 @@
 import type {
   RemoteApplicationStatus,
   RemoteEndpoint,
-} from "@canonical/jujulib/dist/api/facades/client/ClientV6";
-import type { ApplicationOfferStatus } from "@canonical/jujulib/dist/api/facades/client/ClientV6";
+} from "@canonical/jujulib/dist/api/facades/client/ClientV8";
+import type { ApplicationOfferStatus } from "@canonical/jujulib/dist/api/facades/client/ClientV8";
 import { Button, Icon } from "@canonical/react-components";
 import type {
   MainTableCell,

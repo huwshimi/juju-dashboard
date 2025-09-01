@@ -1,4 +1,4 @@
-import type { ModelUserInfo } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
+import type { ModelUserInfo } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
 import type { Endpoint } from "@canonical/jujulib/dist/api/facades/uniter/UniterV18";
 
 import defaultCharmIcon from "static/images/icons/default-charm-icon.svg";

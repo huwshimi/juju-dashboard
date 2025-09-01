@@ -6,7 +6,7 @@ import type {
   CharmRelation,
   CharmResourceMeta,
   CharmStorage,
-} from "@canonical/jujulib/dist/api/facades/charms/CharmsV6";
+} from "@canonical/jujulib/dist/api/facades/charms/CharmsV7";
 import { Factory } from "fishery";
 
 import type { ApplicationInfo } from "juju/types";

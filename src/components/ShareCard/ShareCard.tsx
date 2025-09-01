@@ -1,4 +1,4 @@
-import type { ErrorResults } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
+import type { ErrorResults } from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
 import { Button, Select } from "@canonical/react-components";
 import { useEffect, useState } from "react";
 

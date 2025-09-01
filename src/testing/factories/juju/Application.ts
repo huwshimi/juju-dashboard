@@ -3,7 +3,7 @@ import type {
   Base,
   Value,
   ErrorResults,
-} from "@canonical/jujulib/dist/api/facades/application/ApplicationV18";
+} from "@canonical/jujulib/dist/api/facades/application/ApplicationV20";
 import { Factory } from "fishery";
 
 export const applicationConfigFactory = Factory.define<

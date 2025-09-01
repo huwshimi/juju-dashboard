@@ -53,7 +53,7 @@ export default function ApplicationsTab() {
 
   const remoteAppsTableLength =
     modelName && userName && modelStatusData
-      ? Object.keys(modelStatusData["remote-applications"]).length
+      ? Object.keys(modelStatusData["remote-applications"] || {}).length
       : 0;
 
   const countVisibleTables = (tablesLengths: number[]) =>

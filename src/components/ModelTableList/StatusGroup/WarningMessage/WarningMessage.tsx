@@ -24,7 +24,8 @@ const WarningMessage = ({ model }: Props) => {
   if (!messages.length) {
     return null;
   }
-  const ownerTag = model?.info?.["owner-tag"] ?? "";
+  // TODO
+  const ownerTag = model?.info?.qualifier ?? "";
   const userName = getUserName(ownerTag);
   const modelName = model.model.name;
   const link = (

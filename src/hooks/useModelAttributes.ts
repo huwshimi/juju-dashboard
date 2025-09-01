@@ -29,7 +29,8 @@ export default function useModelAttributes(modelData: ModelDataList | null) {
       }
 
       // Extract owner filters
-      const ownerFilter = extractOwnerName(model.info["owner-tag"]);
+      // TODO
+      const ownerFilter = extractOwnerName(model.info.qualifier);
       if (!owners.includes(ownerFilter)) owners.push(ownerFilter);
 
       // Extract credential filters

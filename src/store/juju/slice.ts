@@ -1,9 +1,9 @@
-import type { Charm } from "@canonical/jujulib/dist/api/facades/charms/CharmsV6";
-import type { FullStatus } from "@canonical/jujulib/dist/api/facades/client/ClientV6";
+import type { Charm } from "@canonical/jujulib/dist/api/facades/charms/CharmsV7";
+import type { FullStatus } from "@canonical/jujulib/dist/api/facades/client/ClientV8";
 import type {
   ModelInfoResults,
   UserModelList,
-} from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV9";
+} from "@canonical/jujulib/dist/api/facades/model-manager/ModelManagerV11";
 import type {
   ListSecretResult,
   SecretValueResult,
@@ -149,7 +149,8 @@ const slice = createSlice({
       userModels.forEach((model) => {
         modelList[model.model.uuid] = {
           name: model.model.name,
-          ownerTag: model.model["owner-tag"],
+          // TODO: don't have an owner anymore:
+          ownerTag: model.model.qualifier,
           type: model.model.type,
           uuid: model.model.uuid,
           wsControllerURL: action.payload.wsControllerURL,

@@ -10,7 +10,7 @@ import type {
   OperationResult,
   OperationResults,
 } from "@canonical/jujulib/dist/api/facades/action/ActionV7";
-import type { CharmActionSpec } from "@canonical/jujulib/dist/api/facades/charms/CharmsV6";
+import type { CharmActionSpec } from "@canonical/jujulib/dist/api/facades/charms/CharmsV7";
 import { Factory } from "fishery";
 
 export const errorFactory = Factory.define<ActionError>(() => ({

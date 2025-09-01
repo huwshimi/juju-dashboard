@@ -56,7 +56,8 @@ function generateModelTableList(
   models.forEach((model) => {
     const activeUser = activeUsers[model.uuid];
     const { highestStatus } = getModelStatusGroupData(model);
-    const owner = model.info ? extractOwnerName(model.info["owner-tag"]) : null;
+    // TODO
+    const owner = model.info ? extractOwnerName(model.info.qualifier) : null;
     const region = getRegion(model);
     const cloud = <CloudCell model={model} />;
     const credential = getCredential(model);
@@ -71,7 +72,7 @@ function generateModelTableList(
             <TruncatedTooltip message={model.model.name}>
               <ModelDetailsLink
                 modelName={model.model.name}
-                ownerTag={model.info?.["owner-tag"]}
+                ownerTag={model.info?.qualifier} // TODO
               >
                 {model.model.name}
               </ModelDetailsLink>
@@ -87,7 +88,7 @@ function generateModelTableList(
         content: (
           <ModelSummary
             modelData={model}
-            ownerTag={model.info?.["owner-tag"]}
+            ownerTag={model.info?.qualifier} // TODO
           />
         ),
         className: "u-overflow--visible",
