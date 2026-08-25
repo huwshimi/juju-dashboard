@@ -56,4 +56,5 @@ requires:
     interface: haproxy-route
 parts:
   charm:
-    charm-python-packages: [setuptools>80.0]
+    plugin: poetry
+    source: machine-charm

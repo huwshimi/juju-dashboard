@@ -67,4 +67,5 @@ requires:
     limit: 1
 parts:
   charm:
-    charm-python-packages: [setuptools>80.0]
+    plugin: poetry
+    source: k8s-charm
