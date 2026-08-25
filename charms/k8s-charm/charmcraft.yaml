@@ -68,3 +68,4 @@ requires:
 parts:
   charm:
     charm-python-packages: [setuptools>80.0]
+    source: k8s-charm

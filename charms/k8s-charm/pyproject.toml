@@ -1,0 +1,19 @@
+[project]
+name = "juju-dashboard-k8s"
+version = "0.0.0"
+dependencies = [
+  "ops == 3.8.1",
+  "pydantic == 2.13.4",
+  "common @ file://${CRAFT_PROJECT_DIR}/common",
+]
+
+[project.optional-dependencies]
+test = [
+  "coverage",
+  "flake8",
+  "ops[testing]",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
